@@ -1,0 +1,79 @@
+# Python & Virtual Environments
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+**/venv/
+backend/venv/
+env/
+ENV/
+
+# Databases & local storage
+*.db
+*.sqlite
+*.sqlite3
+resume_analyzer.db
+backend/resume_analyzer.db
+
+# Heavy ML caches
+**/.cache/
+**/models--*/
+**/.torch/
+
+# Node & Build artifacts
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+build/
+**/build/
+.npm
+.turbo/
+**/.turbo/
+
+# Secrets and Environment Variables (NEVER commit these)
+.env
+.env.*
+!.env.example
+!**/.env.example
+backend/.env
+frontend/.env
+*.pem
+*.key
+
+# Uploads & Vector stores
+uploads/
+**/uploads/*
+!**/uploads/.gitkeep
+backend/uploads/*
+!backend/uploads/.gitkeep
+vectorstore/
+**/vectorstore/*
+!**/vectorstore/.gitkeep
+backend/vectorstore/*
+!backend/vectorstore/.gitkeep
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Coverage / Testing
+.coverage
+htmlcov/
+.pytest_cache/
