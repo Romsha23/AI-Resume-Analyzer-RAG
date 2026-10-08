@@ -29,25 +29,17 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Permissive CORS supporting localhost and any deployed vercel domain
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_origin_regex=r"https://.*\.vercel\.app|http://localhost:.*",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+)
 app.add_middleware(LoggingMiddleware)
-# Allow all origins if CORS_ORIGINS is "*" or empty, otherwise use origin list
-cors_origins = settings.cors_origin_list
-if "*" in cors_origins or not cors_origins:
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=False,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-else:
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=cors_origins,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
 
 api_prefix = "/api"
 app.include_router(auth.router, prefix=api_prefix)
