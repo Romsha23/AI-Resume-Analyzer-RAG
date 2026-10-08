@@ -25,7 +25,8 @@ export default function Register() {
       await register(form)
       navigate('/dashboard')
     } catch (err) {
-      setError(err.response?.data?.detail || 'Registration failed. Please check your credentials.')
+      const msg = err.response?.data?.detail || err.message || 'Registration failed.'
+      setError(typeof msg === 'string' ? msg : JSON.stringify(msg))
     } finally {
       setLoading(false)
     }

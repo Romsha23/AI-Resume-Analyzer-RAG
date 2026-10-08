@@ -21,7 +21,8 @@ export default function Login() {
       await login(email, password)
       navigate('/dashboard')
     } catch (err) {
-      setError(err.response?.data?.detail || 'Invalid email or password.')
+      const msg = err.response?.data?.detail || err.message || 'Invalid email or password.'
+      setError(typeof msg === 'string' ? msg : JSON.stringify(msg))
     } finally {
       setLoading(false)
     }
