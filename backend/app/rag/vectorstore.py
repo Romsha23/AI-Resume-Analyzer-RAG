@@ -6,7 +6,10 @@ from typing import TYPE_CHECKING
 # Valid keys: resume:12 or jd:3 (not old FAISS filesystem paths)
 COLLECTION_KEY_RE = re.compile(r"^(resume|jd):\d+$")
 
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+try:
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
+except ImportError:
+    from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 from loguru import logger
 
