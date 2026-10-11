@@ -70,7 +70,6 @@ flowchart TD
 
 ### Prerequisites
 - **Python**: 3.11+
-- **Node.js**: 20+ (with npm)
 - **Google Gemini API Key**: [Get your key from Google AI Studio](https://aistudio.google.com/app/apikey)
 
 ---
