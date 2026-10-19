@@ -1,6 +1,6 @@
 # ResumeIQ — AI Resume & Job Intelligence
 
-A full-stack, production-grade AI-powered career platform that leverages **FastAPI**, **React**, **Google Gemini**, **FAISS / Supabase pgvector**, and **Tailwind CSS with Aceternity UI** to deliver real-time ATS compatibility scoring, resume–job description matching, skill gap discovery, RAG conversational assistance, and personalized interview preparation.
+A AI based, production-grade AI-powered career platform that leverages **FastAPI**, **React**, **Google Gemini**, **Supabase pgvector**, and **Tailwind CSS with Aceternity UI** to deliver real-time ATS compatibility scoring, resume–job description matching, skill gap discovery, RAG conversational assistance, and personalized interview preparation.
 
 *Powered by Romsha Wadhwa*
 
@@ -35,7 +35,7 @@ flowchart TD
         Parser --> DB[(SQLite / PostgreSQL)]
         Parser --> Chunk[Text Chunking & Preprocessing]
         Chunk --> Embed[Gemini Embeddings API]
-        Embed --> VectorDB[(FAISS / Supabase pgvector)]
+        Embed --> VectorDB[(Supabase pgvector)]
         
         VectorDB -. Similarity Retrieval .-> Chat
         Chat --> Gemini[Google Gemini 2.0 Flash / Flash-Lite]
@@ -59,7 +59,7 @@ flowchart TD
 ### Backend
 - **Framework**: FastAPI (Python 3.11+)
 - **LLM & Embeddings**: Google Gemini API (`gemini-2.0-flash-lite`, `embedding-001`)
-- **Vector Search / RAG**: FAISS & Supabase pgvector
+- **Vector Search / RAG**: Supabase pgvector
 - **PDF Extraction**: PyMuPDF (fitz)
 - **Database / ORM**: SQLite / PostgreSQL via SQLAlchemy + aiosqlite
 - **Security**: OAuth2 with Password Hashing (bcrypt) & PyJWT
