@@ -118,10 +118,14 @@ export default function Sidebar({ onClose }) {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
+    let isMounted = true
     resumeAPI.list()
-      .then(r => setRecentResumes((r.data || []).slice(0, 3)))
+      .then(r => {
+        if (isMounted) setRecentResumes((r.data || []).slice(0, 3))
+      })
       .catch(() => {})
-  }, [location.pathname])
+    return () => { isMounted = false }
+  }, [location.pathname === '/resume'])
 
   const initials = user?.full_name
     ? user.full_name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)

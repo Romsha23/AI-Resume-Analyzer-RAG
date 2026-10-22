@@ -9,14 +9,20 @@ export function useSelection() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    let isMounted = true
     Promise.all([resumeAPI.list(), jdAPI.list()])
       .then(([r, j]) => {
-        setResumes(r.data)
-        setJds(j.data)
-        if (r.data.length) setResumeId(String(r.data[0].id))
-        if (j.data.length) setJdId(String(j.data[0].id))
+        if (!isMounted) return
+        setResumes(r.data || [])
+        setJds(j.data || [])
+        if (r.data?.length) setResumeId(String(r.data[0].id))
+        if (j.data?.length) setJdId(String(j.data[0].id))
       })
-      .finally(() => setLoading(false))
+      .catch(() => {})
+      .finally(() => {
+        if (isMounted) setLoading(false)
+      })
+    return () => { isMounted = false }
   }, [])
 
   return { resumes, jds, resumeId, setResumeId, jdId, setJdId, loading }

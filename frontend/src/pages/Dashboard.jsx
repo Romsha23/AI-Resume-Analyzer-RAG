@@ -496,10 +496,14 @@ export default function Dashboard() {
   const { dark, toggle } = useTheme()
 
   useEffect(() => {
+    let isMounted = true
     Promise.all([
-      dashboardAPI.stats().then(r => setStats(r.data)).catch(() => {}),
-      resumeAPI.list().then(r => setResumes(r.data || [])).catch(() => {}),
-    ]).finally(() => setLoading(false))
+      dashboardAPI.stats().then(r => { if (isMounted) setStats(r.data) }).catch(() => {}),
+      resumeAPI.list().then(r => { if (isMounted) setResumes(r.data || []) }).catch(() => {}),
+    ]).finally(() => {
+      if (isMounted) setLoading(false)
+    })
+    return () => { isMounted = false }
   }, [])
 
   const displayName   = user?.full_name?.split(' ')[0] || user?.email?.split('@')[0] || 'there'

@@ -16,30 +16,18 @@ export function BackgroundGradientAnimation({
   interactive = true,
   containerClassName = '',
 }) {
-  const interactiveRef = useRef(null)
-
-  const [curX, setCurX] = useState(0)
-  const [curY, setCurY] = useState(0)
-  const [tgX, setTgX] = useState(0)
-  const [tgY, setTgY] = useState(0)
-
   useEffect(() => {
-    document.body.style.setProperty(
-      '--gradient-background-start',
-      gradientBackgroundStart
-    )
-    document.body.style.setProperty(
-      '--gradient-background-end',
-      gradientBackgroundEnd
-    )
-    document.body.style.setProperty('--first-color', firstColor)
-    document.body.style.setProperty('--second-color', secondColor)
-    document.body.style.setProperty('--third-color', thirdColor)
-    document.body.style.setProperty('--fourth-color', fourthColor)
-    document.body.style.setProperty('--fifth-color', fifthColor)
-    document.body.style.setProperty('--pointer-color', pointerColor)
-    document.body.style.setProperty('--size', size)
-    document.body.style.setProperty('--blending-value', blendingValue)
+    const root = document.documentElement
+    root.style.setProperty('--gradient-background-start', gradientBackgroundStart)
+    root.style.setProperty('--gradient-background-end', gradientBackgroundEnd)
+    root.style.setProperty('--first-color', firstColor)
+    root.style.setProperty('--second-color', secondColor)
+    root.style.setProperty('--third-color', thirdColor)
+    root.style.setProperty('--fourth-color', fourthColor)
+    root.style.setProperty('--fifth-color', fifthColor)
+    root.style.setProperty('--pointer-color', pointerColor)
+    root.style.setProperty('--size', size)
+    root.style.setProperty('--blending-value', blendingValue)
   }, [
     gradientBackgroundStart,
     gradientBackgroundEnd,
@@ -53,30 +41,34 @@ export function BackgroundGradientAnimation({
     blendingValue,
   ])
 
+  const interactiveRef = useRef(null)
+  // Use refs instead of state so mouse animation does NOT cause full React re-renders 60 times/sec
+  const curPos = useRef({ x: 0, y: 0 })
+  const tgPos = useRef({ x: 0, y: 0 })
+  const rafId = useRef(null)
+
   useEffect(() => {
-    let animationFrameId
     function move() {
       if (!interactiveRef.current) return
-      setCurX((prev) => prev + (tgX - prev) / 20)
-      setCurY((prev) => prev + (tgY - prev) / 20)
-      interactiveRef.current.style.transform = `translate(${Math.round(
-        curX
-      )}px, ${Math.round(curY)}px)`
-      animationFrameId = requestAnimationFrame(move)
+      curPos.current.x += (tgPos.current.x - curPos.current.x) / 15
+      curPos.current.y += (tgPos.current.y - curPos.current.y) / 15
+      interactiveRef.current.style.transform = `translate3d(${Math.round(curPos.current.x)}px, ${Math.round(curPos.current.y)}px, 0)`
+      rafId.current = requestAnimationFrame(move)
     }
+
     if (interactive) {
-      animationFrameId = requestAnimationFrame(move)
+      rafId.current = requestAnimationFrame(move)
     }
     return () => {
-      if (animationFrameId) cancelAnimationFrame(animationFrameId)
+      if (rafId.current) cancelAnimationFrame(rafId.current)
     }
-  }, [tgX, tgY, curX, curY, interactive])
+  }, [interactive])
 
   const handleMouseMove = (event) => {
     if (interactiveRef.current) {
       const rect = interactiveRef.current.getBoundingClientRect()
-      setTgX(event.clientX - rect.left)
-      setTgY(event.clientY - rect.top)
+      tgPos.current.x = event.clientX - rect.left
+      tgPos.current.y = event.clientY - rect.top
     }
   }
 

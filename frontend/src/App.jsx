@@ -1,17 +1,31 @@
+import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import ProtectedRoute from './components/ProtectedRoute'
 import GlobalAnimatedBackground from './components/GlobalAnimatedBackground'
-import ATSAnalysis from './pages/ATSAnalysis'
-import AIChatbot from './pages/AIChatbot'
-import Dashboard from './pages/Dashboard'
-import Home from './pages/Home'
-import InterviewQuestions from './pages/InterviewQuestions'
-import JDUpload from './pages/JDUpload'
-import Login from './pages/Login'
-import MatchReport from './pages/MatchReport'
-import Register from './pages/Register'
-import ResumeUpload from './pages/ResumeUpload'
+
+// Code-split pages for instant initial bundle loading and minimal memory footprint
+const Home = lazy(() => import('./pages/Home'))
+const Login = lazy(() => import('./pages/Login'))
+const Register = lazy(() => import('./pages/Register'))
+const Dashboard = lazy(() => import('./pages/Dashboard'))
+const ResumeUpload = lazy(() => import('./pages/ResumeUpload'))
+const JDUpload = lazy(() => import('./pages/JDUpload'))
+const ATSAnalysis = lazy(() => import('./pages/ATSAnalysis'))
+const MatchReport = lazy(() => import('./pages/MatchReport'))
+const AIChatbot = lazy(() => import('./pages/AIChatbot'))
+const InterviewQuestions = lazy(() => import('./pages/InterviewQuestions'))
+
+function PageFallback() {
+  return (
+    <div className="flex h-[60vh] w-full items-center justify-center">
+      <div className="flex flex-col items-center gap-3">
+        <div className="h-8 w-8 animate-spin rounded-full border-3 border-accent/20 border-t-accent" />
+        <span className="text-[12px] font-medium text-ink-muted">Loading workspace...</span>
+      </div>
+    </div>
+  )
+}
 
 export default function App() {
   return (
@@ -21,7 +35,8 @@ export default function App() {
 
       {/* ── Foreground Application Content ── */}
       <div className="relative z-10 min-h-screen">
-        <Routes>
+        <Suspense fallback={<PageFallback />}>
+          <Routes>
           {/* Public routes */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -55,6 +70,7 @@ export default function App() {
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </Suspense>
       </div>
     </div>
   )
